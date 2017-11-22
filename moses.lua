@@ -825,13 +825,12 @@ function _.push(array, ...)
 end
 
 --- Removes and returns the values at the top of a given array.
--- <br/><em>Aliased as `shift`</em>
--- @name pop
+-- @name shift
 -- @param array an array
 -- @param[opt] n the number of values to be popped. Defaults to 1.
 -- @return the popped values
 -- @see unshift
-function _.pop(array, n)
+function _.shift(array, n)
   n = min(n or 1, #array)
   local ret = {}
   for i = 1, n do 
@@ -847,7 +846,7 @@ end
 -- @param array an array
 -- @param[opt] n the number of values to be unshifted. Defaults to 1.
 -- @return the values
--- @see pop
+-- @see shift
 function _.unshift(array, n)
   n = min(n or 1, #array)
   local ret = {}
@@ -1660,7 +1659,7 @@ function _.partial(f,...)
 		local n_args = {...}	
 		local f_args = {}
 		for k,v in ipairs(partial_args) do
-			f_args[k] = (v == '_') and _.pop(n_args) or v
+			f_args[k] = (v == '_') and _.shift(n_args) or v
 		end
 		return f(unpack(_.append(f_args,n_args)))
 	end
@@ -1679,7 +1678,7 @@ function _.partialRight(f,...)
 		local n_args = {...}	
 		local f_args = {}
 		for k = 1,#partial_args do
-			f_args[k] = (partial_args[k] == '_') and _.pop(n_args) or partial_args[k]
+			f_args[k] = (partial_args[k] == '_') and _.shift(n_args) or partial_args[k]
 		end
 		return f(unpack(_.append(n_args, f_args)))
 	end
@@ -2143,7 +2142,6 @@ do
   -- Array functions aliases
   _.takeWhile   = _.selectWhile
   _.rejectWhile = _.dropWhile
-  _.shift       = _.pop
   _.remove      = _.pull
   _.rmRange     = _.removeRange
   _.chop        = _.removeRange
