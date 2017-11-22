@@ -257,15 +257,15 @@ context('Array functions specs', function()
     
   end)  
 
-  context('pop', function()
+  context('shift', function()
   
     test('returns the value at the top of a given array', function()
-        assert_equal(_.pop {1,7,9} ,1)
+        assert_equal(_.shift {1,7,9} ,1)
     end) 
 
     test('also removes this value from the given array', function()
       local array = {1,7,9}
-      assert_equal(_.pop(array),1)
+      assert_equal(_.shift(array),1)
       assert_true(_.isEqual(array,{7,9}))
     end)  
     
