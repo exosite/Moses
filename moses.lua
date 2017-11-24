@@ -803,12 +803,12 @@ end
 
 --- Adds all passed-in values at the top of an array. The last elements will bubble to the
 -- top of the given array.
--- @name addTop
+-- @name unshift
 -- @param array an array
 -- @param ... a variable number of arguments
 -- @return the passed-in array with new values added
 -- @see push
-function _.addTop(array, ...)
+function _.unshift(array, ...)
   _.each({...},function(i,v) t_insert(array,1,v) end)
   return array
 end
@@ -818,7 +818,7 @@ end
 -- @param array an array
 -- @param ... a variable number of arguments
 -- @return the passed-in array with new added values
--- @see addTop
+-- @see unshift
 function _.push(array, ...)
   _.each({...}, function(i,v) array[#array+1] = v end)
   return array

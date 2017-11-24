@@ -229,16 +229,16 @@ context('Array functions specs', function()
     
   end)
 	
-  context('addTop', function()
+  context('unshift', function()
   
     test('adds values at the top of an array', function()
-      assert_true(_.isEqual(_.addTop({},1,2,3),{3,2,1}))
-      assert_true(_.isEqual(_.addTop({},'a',true,3),{3,true,'a'}))
+      assert_true(_.isEqual(_.unshift({},1,2,3),{3,2,1}))
+      assert_true(_.isEqual(_.unshift({},'a',true,3),{3,true,'a'}))
     end)
 
     test('preserves the existing elements', function()
-      assert_true(_.isEqual(_.addTop({1,2},1,2,3),{3,2,1,1,2}))
-      assert_true(_.isEqual(_.addTop({'i','j'},'a',true,3),{3,true,'a','i','j'}))
+      assert_true(_.isEqual(_.unshift({1,2},1,2,3),{3,2,1,1,2}))
+      assert_true(_.isEqual(_.unshift({'i','j'},'a',true,3),{3,true,'a','i','j'}))
     end)    
     
   end)
