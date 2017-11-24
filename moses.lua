@@ -829,7 +829,7 @@ end
 -- @param array an array
 -- @param[opt] n the number of values to be popped. Defaults to 1.
 -- @return the popped values
--- @see unshift
+-- @see pop
 function _.shift(array, n)
   n = min(n or 1, #array)
   local ret = {}
@@ -842,12 +842,12 @@ function _.shift(array, n)
 end
 
 --- Removes and returns the values at the end of a given array.
--- @name unshift
+-- @name pop
 -- @param array an array
--- @param[opt] n the number of values to be unshifted. Defaults to 1.
+-- @param[opt] n the number of values to be poped. Defaults to 1.
 -- @return the values
 -- @see shift
-function _.unshift(array, n)
+function _.pop(array, n)
   n = min(n or 1, #array)
   local ret = {}
   for i = 1, n do
