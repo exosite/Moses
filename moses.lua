@@ -803,12 +803,12 @@ end
 
 --- Adds all passed-in values at the top of an array. The last elements will bubble to the
 -- top of the given array.
--- @name addTop
+-- @name unshift
 -- @param array an array
 -- @param ... a variable number of arguments
 -- @return the passed-in array with new values added
 -- @see push
-function _.addTop(array, ...)
+function _.unshift(array, ...)
   _.each({...},function(i,v) t_insert(array,1,v) end)
   return array
 end
@@ -818,7 +818,7 @@ end
 -- @param array an array
 -- @param ... a variable number of arguments
 -- @return the passed-in array with new added values
--- @see addTop
+-- @see unshift
 function _.push(array, ...)
   _.each({...}, function(i,v) array[#array+1] = v end)
   return array
@@ -829,7 +829,7 @@ end
 -- @param array an array
 -- @param[opt] n the number of values to be popped. Defaults to 1.
 -- @return the popped values
--- @see unshift
+-- @see pop
 function _.shift(array, n)
   n = min(n or 1, #array)
   local ret = {}
@@ -842,12 +842,12 @@ function _.shift(array, n)
 end
 
 --- Removes and returns the values at the end of a given array.
--- @name unshift
+-- @name pop
 -- @param array an array
--- @param[opt] n the number of values to be unshifted. Defaults to 1.
+-- @param[opt] n the number of values to be poped. Defaults to 1.
 -- @return the values
 -- @see shift
-function _.unshift(array, n)
+function _.pop(array, n)
   n = min(n or 1, #array)
   local ret = {}
   for i = 1, n do
@@ -1154,11 +1154,11 @@ function _.unzip(t)
 end
 
 --- Clones a given array and appends values from other array.
--- @name append
+-- @name concat 
 -- @param array an array
 -- @param other an array
 -- @return a new array
-function _.append(array, other)
+function _.concat(array, other)
   local t = {}
   for i,v in ipairs(array) do t[i] = v end
   for i,v in ipairs(other) do t[#t+1] = v end
@@ -1276,13 +1276,13 @@ end
 -- passed, it will be used as a separator. Passing `i` and `j` will result in concatenating
 -- only values within `[i, j]` range.
 -- <br/><em>Aliased as `join`</em>
--- @name concat
+-- @name join
 -- @param array a given array
 -- @param[opt] sep a separator string, defaults to the empty string `''`.
 -- @param[optchain] i the starting index, defaults to 1.
 -- @param[optchain] j the final index, defaults to the array length.
 -- @return a string
-function _.concat(array, sep, i, j)
+function _.join(array, sep, i, j)
   local _array = _.map(array,function(i,v)
     return tostring(v)
   end)
@@ -1499,7 +1499,7 @@ end
 function _.bindn(f, ...)
   local iArg = {...}
   return function (...)
-      return f(unpack(_.append(iArg,{...})))
+      return f(unpack(_.concat(iArg,{...})))
     end
 end
 
@@ -1661,7 +1661,7 @@ function _.partial(f,...)
 		for k,v in ipairs(partial_args) do
 			f_args[k] = (v == '_') and _.shift(n_args) or v
 		end
-		return f(unpack(_.append(f_args,n_args)))
+		return f(unpack(_.concat(f_args,n_args)))
 	end
 end
 
@@ -1680,7 +1680,7 @@ function _.partialRight(f,...)
 		for k = 1,#partial_args do
 			f_args[k] = (partial_args[k] == '_') and _.shift(n_args) or partial_args[k]
 		end
-		return f(unpack(_.append(n_args, f_args)))
+		return f(unpack(_.concat(n_args, f_args)))
 	end
 end
 
@@ -2160,7 +2160,6 @@ do
   _.part        = _.partition
   _.perm        = _.permutation
   _.mirror      = _.invert
-  _.join        = _.concat
   
   -- Utility functions aliases
   _.cache       = _.memoize

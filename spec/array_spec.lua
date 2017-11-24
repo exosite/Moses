@@ -229,16 +229,16 @@ context('Array functions specs', function()
     
   end)
 	
-  context('addTop', function()
+  context('unshift', function()
   
     test('adds values at the top of an array', function()
-      assert_true(_.isEqual(_.addTop({},1,2,3),{3,2,1}))
-      assert_true(_.isEqual(_.addTop({},'a',true,3),{3,true,'a'}))
+      assert_true(_.isEqual(_.unshift({},1,2,3),{3,2,1}))
+      assert_true(_.isEqual(_.unshift({},'a',true,3),{3,true,'a'}))
     end)
 
     test('preserves the existing elements', function()
-      assert_true(_.isEqual(_.addTop({1,2},1,2,3),{3,2,1,1,2}))
-      assert_true(_.isEqual(_.addTop({'i','j'},'a',true,3),{3,true,'a','i','j'}))
+      assert_true(_.isEqual(_.unshift({1,2},1,2,3),{3,2,1,1,2}))
+      assert_true(_.isEqual(_.unshift({'i','j'},'a',true,3),{3,true,'a','i','j'}))
     end)    
     
   end)
@@ -271,15 +271,15 @@ context('Array functions specs', function()
     
   end)  
   
-  context('unshift', function()
+  context('pop', function()
   
     test('returns the value at the end of a given array', function()
-        assert_equal(_.unshift {1,7,9} ,9)
+        assert_equal(_.pop {1,7,9} ,9)
     end) 
 
     test('also removes this value from the given array', function()
       local array = {1,7,9}
-      assert_equal(_.unshift(array),9)
+      assert_equal(_.pop(array),9)
       assert_true(_.isEqual(array,{1,7}))
     end) 
     
@@ -564,10 +564,10 @@ context('Array functions specs', function()
     end)
   end) 
   
-  context('append',function()  
+  context('concat',function()  
     
-    test('appends two arrays together', function()
-      assert_true(_.isEqual(_.append({1,2,3},{'a','b'}),{1,2,3,'a','b'}))
+    test('concats two arrays together', function()
+      assert_true(_.isEqual(_.concat({1,2,3},{'a','b'}),{1,2,3,'a','b'}))
     end)    
   
   end)  
@@ -704,7 +704,7 @@ context('Array functions specs', function()
       local array = {'a','b', 'c'}
       local perm = {'abc','acb', 'bac', 'bca', 'cab', 'cba'}
       for p in _.permutation(array) do
-        local strp = _.concat(p)
+        local strp = _.join(p)
         _.pull(perm, strp)
       end
       assert_true(#perm == 0)
@@ -721,26 +721,26 @@ context('Array functions specs', function()
     
   end) 
 
-  context('concat',function()  
+  context('join',function()  
     
     test('concatenates an array contents', function()
-      assert_equal(_.concat({1,2,3,4}),'1234')
-      assert_equal(_.concat({'a',1,0,1,'b'}),'a101b')
+      assert_equal(_.join({1,2,3,4}),'1234')
+      assert_equal(_.join({'a',1,0,1,'b'}),'a101b')
     end) 
 
     test('handles boolean values', function()
-      assert_equal(_.concat({1,true,3,false}),'1true3false')
+      assert_equal(_.join({1,true,3,false}),'1true3false')
     end) 
 
     test('when arg "sep" is given, uses "sep" as a separator', function()
-      assert_equal(_.concat({1,3,false,'A'},' '),'1 3 false A')
-      assert_equal(_.concat({1,3,false,'A'},', '),'1, 3, false, A')
+      assert_equal(_.join({1,3,false,'A'},' '),'1 3 false A')
+      assert_equal(_.join({1,3,false,'A'},', '),'1, 3, false, A')
     end) 
 
     test('when args "i" and/or "j" are given, concats values within "i" and "j" indexes', function()
-      assert_equal(_.concat({1,3,false,'A'},' ',2,3),'3 false')
-      assert_equal(_.concat({1,3,false,'A'},', ',2,3),'3, false')
-      assert_equal(_.concat({1,3,false,'A','K'},' ',2),'3 false A K')
+      assert_equal(_.join({1,3,false,'A'},' ',2,3),'3 false')
+      assert_equal(_.join({1,3,false,'A'},', ',2,3),'3, false')
+      assert_equal(_.join({1,3,false,'A','K'},' ',2),'3 false A K')
     end)  
   
   end)  
