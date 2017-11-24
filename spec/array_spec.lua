@@ -564,10 +564,10 @@ context('Array functions specs', function()
     end)
   end) 
   
-  context('append',function()  
+  context('concat',function()  
     
-    test('appends two arrays together', function()
-      assert_true(_.isEqual(_.append({1,2,3},{'a','b'}),{1,2,3,'a','b'}))
+    test('concats two arrays together', function()
+      assert_true(_.isEqual(_.concat({1,2,3},{'a','b'}),{1,2,3,'a','b'}))
     end)    
   
   end)  

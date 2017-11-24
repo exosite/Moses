@@ -1154,11 +1154,11 @@ function _.unzip(t)
 end
 
 --- Clones a given array and appends values from other array.
--- @name append
+-- @name concat 
 -- @param array an array
 -- @param other an array
 -- @return a new array
-function _.append(array, other)
+function _.concat(array, other)
   local t = {}
   for i,v in ipairs(array) do t[i] = v end
   for i,v in ipairs(other) do t[#t+1] = v end
@@ -1499,7 +1499,7 @@ end
 function _.bindn(f, ...)
   local iArg = {...}
   return function (...)
-      return f(unpack(_.append(iArg,{...})))
+      return f(unpack(_.concat(iArg,{...})))
     end
 end
 
@@ -1661,7 +1661,7 @@ function _.partial(f,...)
 		for k,v in ipairs(partial_args) do
 			f_args[k] = (v == '_') and _.shift(n_args) or v
 		end
-		return f(unpack(_.append(f_args,n_args)))
+		return f(unpack(_.concat(f_args,n_args)))
 	end
 end
 
@@ -1680,7 +1680,7 @@ function _.partialRight(f,...)
 		for k = 1,#partial_args do
 			f_args[k] = (partial_args[k] == '_') and _.shift(n_args) or partial_args[k]
 		end
-		return f(unpack(_.append(n_args, f_args)))
+		return f(unpack(_.concat(n_args, f_args)))
 	end
 end
 
