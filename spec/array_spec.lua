@@ -704,7 +704,7 @@ context('Array functions specs', function()
       local array = {'a','b', 'c'}
       local perm = {'abc','acb', 'bac', 'bca', 'cab', 'cba'}
       for p in _.permutation(array) do
-        local strp = _.concat(p)
+        local strp = _.join(p)
         _.pull(perm, strp)
       end
       assert_true(#perm == 0)
@@ -721,26 +721,26 @@ context('Array functions specs', function()
     
   end) 
 
-  context('concat',function()  
+  context('join',function()  
     
     test('concatenates an array contents', function()
-      assert_equal(_.concat({1,2,3,4}),'1234')
-      assert_equal(_.concat({'a',1,0,1,'b'}),'a101b')
+      assert_equal(_.join({1,2,3,4}),'1234')
+      assert_equal(_.join({'a',1,0,1,'b'}),'a101b')
     end) 
 
     test('handles boolean values', function()
-      assert_equal(_.concat({1,true,3,false}),'1true3false')
+      assert_equal(_.join({1,true,3,false}),'1true3false')
     end) 
 
     test('when arg "sep" is given, uses "sep" as a separator', function()
-      assert_equal(_.concat({1,3,false,'A'},' '),'1 3 false A')
-      assert_equal(_.concat({1,3,false,'A'},', '),'1, 3, false, A')
+      assert_equal(_.join({1,3,false,'A'},' '),'1 3 false A')
+      assert_equal(_.join({1,3,false,'A'},', '),'1, 3, false, A')
     end) 
 
     test('when args "i" and/or "j" are given, concats values within "i" and "j" indexes', function()
-      assert_equal(_.concat({1,3,false,'A'},' ',2,3),'3 false')
-      assert_equal(_.concat({1,3,false,'A'},', ',2,3),'3, false')
-      assert_equal(_.concat({1,3,false,'A','K'},' ',2),'3 false A K')
+      assert_equal(_.join({1,3,false,'A'},' ',2,3),'3 false')
+      assert_equal(_.join({1,3,false,'A'},', ',2,3),'3, false')
+      assert_equal(_.join({1,3,false,'A','K'},' ',2),'3 false A K')
     end)  
   
   end)  

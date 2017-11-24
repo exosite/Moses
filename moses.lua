@@ -1276,13 +1276,13 @@ end
 -- passed, it will be used as a separator. Passing `i` and `j` will result in concatenating
 -- only values within `[i, j]` range.
 -- <br/><em>Aliased as `join`</em>
--- @name concat
+-- @name join
 -- @param array a given array
 -- @param[opt] sep a separator string, defaults to the empty string `''`.
 -- @param[optchain] i the starting index, defaults to 1.
 -- @param[optchain] j the final index, defaults to the array length.
 -- @return a string
-function _.concat(array, sep, i, j)
+function _.join(array, sep, i, j)
   local _array = _.map(array,function(i,v)
     return tostring(v)
   end)
@@ -2160,7 +2160,6 @@ do
   _.part        = _.partition
   _.perm        = _.permutation
   _.mirror      = _.invert
-  _.join        = _.concat
   
   -- Utility functions aliases
   _.cache       = _.memoize
