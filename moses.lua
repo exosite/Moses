@@ -120,7 +120,7 @@ end
 -- @param[opt] ... Optional args to be passed to `f`
 -- @see each
 function _.eachi(t, f, ...)
-  local lkeys = _.sort(_.select(_.keys(t), function(v,k)
+  local lkeys = _.sort(_.filter(_.keys(t), function(v,k)
     return _.isInteger(v)
   end))
   for k, key in ipairs(lkeys) do
@@ -244,7 +244,7 @@ end
 -- @return the final state of reduction
 -- @see reduce
 function _.reduceby(t, f, state, pred, ...)
-	return _.reduce(_.select(t, pred, ...), f, state)
+	return _.reduce(_.filter(t, pred, ...), f, state)
 end
 
 --- Reduces a table, right-to-left. Folds the table from the last element to the first element 
@@ -333,7 +333,7 @@ end
 -- @return an array of values from the passed-in table
 -- @see findWhere
 function _.where(t, props)
-	local r = _.select(t, function(v)
+	local r = _.filter(t, function(v)
 		for key in pairs(props) do
 			if v[key] ~= props[key] then return false end
 		end
@@ -366,7 +366,7 @@ end
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return the selected values
 -- @see reject
-function _.select(t, f, ...)
+function _.filter(t, f, ...)
   local _t = {}
   for index,value in pairs(t) do
     if f(value, index,...) then _t[#_t+1] = value end
@@ -381,7 +381,7 @@ end
 -- @param f an iterator function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return the remaining values
--- @see select
+-- @see filter
 function _.reject(t, f, ...)
   local _mapped = _.map(t,f,...)
   local _t = {}
@@ -399,7 +399,7 @@ end
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return `true` if all values passes the predicate, `false` otherwise
 function _.all(t, f, ...)
-  return ((#_.select(_.map(t,f,...), isTrue)) == count(t))
+  return ((#_.filter(_.map(t,f,...), isTrue)) == count(t))
 end
 
 --- Invokes a method on each value in a table.
@@ -648,7 +648,7 @@ end
 -- @see sample
 function _.sampleProb(array, prob, seed)
 	if seed then randomseed(seed) end
-	return _.select(array, function(v) return random() < prob end)
+	return _.filter(array, function(v) return random() < prob end)
 end
 
 --- Converts a list of arguments to an array.
@@ -935,7 +935,7 @@ end
 -- @param[optchain] finish the upper bound index, defaults to the array length.
 -- @return a new array of sliced values
 function _.slice(array, start, finish)
-  return _.select(array, function(_,index)
+  return _.filter(array, function(_,index)
       return (index >= (start or next(array)) and index <= (finish or #array))
     end)
 end
@@ -1043,7 +1043,7 @@ end
 -- @see symmetricDifference
 function _.difference(array, array2)
   if not array2 then return _.clone(array) end
-  return _.select(array,function(value,i)
+  return _.filter(array,function(value,i)
       return not _.include(array2,value)
     end)
 end
@@ -2135,7 +2135,6 @@ do
   _.any         = _.include
   _.some        = _.include
   _.contains    = _.include
-  _.filter      = _.select
   _.discard     = _.reject
   _.every       = _.all
   
