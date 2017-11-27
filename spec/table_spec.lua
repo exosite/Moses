@@ -18,7 +18,7 @@ context('Table functions specs', function()
     test('provides values and iteration count ', function()
       local t = {1,2,3}
       local inc = 0
-      _.each(t,function(i,v)
+      _.each(t,function(v,i)
         inc = inc+1
         assert_equal(i,inc)
         assert_equal(t[i],v)
@@ -27,7 +27,7 @@ context('Table functions specs', function()
   
     test('can reference the given table', function()
       local t = {1,2,3}
-      _.each(t,function(i,v,mul)
+      _.each(t,function(v,i,mul)
         t[i] = v*mul
       end,5)
       assert_true(_.isEqual(t,{5,10,15}))
@@ -36,7 +36,7 @@ context('Table functions specs', function()
     test('iterates over non-numeric keys and objects', function()
       local t = {one = 1, two = 2, three = 3}
       local copy = {}
-      _.each(t,function(i,v) copy[i] = v end)
+      _.each(t,function(v,i) copy[i] = v end)
       assert_true(_.isEqual(t,copy))
     end)
     
@@ -47,7 +47,7 @@ context('Table functions specs', function()
     test('provides values and iteration count for integer keys only, in a sorted way', function()
       local t = {1,2,3}
       local inc = 0
-      _.eachi(t,function(i,v)
+      _.eachi(t,function(v,i)
         inc = inc+1
         assert_equal(i,inc)
         assert_equal(t[i],v)
@@ -59,7 +59,7 @@ context('Table functions specs', function()
       local rk = {-1, 0, 1, 2}
       local rv = {6, 1, 3, 5}
       local inc = 0
-      _.eachi(t,function(i,v)
+      _.eachi(t,function(v,i)
         inc = inc+1
         assert_equal(i,rk[inc])
         assert_equal(v,rv[inc])
@@ -152,7 +152,7 @@ context('Table functions specs', function()
       for k,v in _.cycle(t) do
         t[k] = v + 1
       end
-      _.each(t, function(k, v)
+      _.each(t, function(v, k)
         assert_equal(v, k + 1)
       end)
     end)   
@@ -165,7 +165,7 @@ context('Table functions specs', function()
       for k,v in _.cycle(t, -2) do
         t[k] = v + 1
       end      
-      _.each(t, function(k, v)
+      _.each(t, function(v, k)
         assert_equal(v, k)
       end)
     end)     
@@ -357,11 +357,11 @@ context('Table functions specs', function()
   context('select', function()
   
     test('collects all values passing a truth test with an iterator', function()
-      assert_true(_.isEqual(_.select({1,2,3,4,5,6,7}, function(key,value) 
+      assert_true(_.isEqual(_.select({1,2,3,4,5,6,7}, function(value,key) 
           return (value%2==0)
         end),{2,4,6}))
         
-      assert_true(_.isEqual(_.select({1,2,3,4,5,6,7}, function(key,value) 
+      assert_true(_.isEqual(_.select({1,2,3,4,5,6,7}, function(value,key) 
           return (value%2~=0)
         end),{1,3,5,7}))        
     end)
@@ -570,15 +570,15 @@ context('Table functions specs', function()
   
     test('splits a collection in subsets and counts items inside', function()
 
-      assert_true(_.isEqual(_.countBy({0,1,2,3,4,5,6},function(i,value) 
+      assert_true(_.isEqual(_.countBy({0,1,2,3,4,5,6},function(i,value)
           return value%2==0 and 'even' or 'odd'
         end),{even = 4,odd = 3}))
         
-      assert_true(_.isEqual(_.countBy({0,'a',true, false,nil,b,0.5},function(i,value) 
+      assert_true(_.isEqual(_.countBy({0,'a',true, false,nil,b,0.5},function(i,value)
           return type(value) 
         end),{number = 2,string = 1,boolean = 2}))
         
-      assert_true(_.isEqual(_.countBy({'one','two','three','four','five'},function(i,value) 
+      assert_true(_.isEqual(_.countBy({'one','two','three','four','five'},function(i,value)
           return value:len()
         end),{[3] = 2,[4] = 2,[5] = 1}))
         

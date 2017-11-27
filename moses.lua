@@ -26,7 +26,7 @@ local _                          = {}
 local function f_max(a,b) return a>b end
 local function f_min(a,b) return a<b end
 local function clamp(var,a,b) return (var<a) and a or (var>b and b or var) end
-local function isTrue(_,value) return value and true end
+local function isTrue(value) return value and true end
 local function iNot(_,value) return not value end
 
 local function count(t)  -- raw count of items in an map-table
@@ -97,34 +97,34 @@ function _.clear(t)
 	return t
 end
 
---- Iterates on key-value pairs, calling `f (k, v)` at every step.
+--- Iterates on key-value pairs, calling `f (v, k)` at every step.
 -- <br/><em>Aliased as `forEach`</em>.
 -- @name each
 -- @param t a table
--- @param f a function, prototyped as `f (k, v, ...)`
+-- @param f a function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @see eachi
 function _.each(t, f, ...)
   for index,value in pairs(t) do
-    f(index,value,...)
+    f(value,index,...)
   end
 end
 
---- Iterates on integer key-value pairs, calling `f(k, v)` every step. 
+--- Iterates on integer key-value pairs, calling `f(v, k)` every step.
 -- Only applies to values located at integer keys. The table can be a sparse array. 
 -- Iteration will start from the lowest integer key found to the highest one.
 -- <br/><em>Aliased as `forEachi`</em>.
 -- @name eachi
 -- @param t a table
--- @param f a function, prototyped as `f (k, v, ...)`
+-- @param f a function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @see each
 function _.eachi(t, f, ...)
-  local lkeys = _.sort(_.select(_.keys(t), function(k,v)
+  local lkeys = _.sort(_.select(_.keys(t), function(v,k)
     return _.isInteger(v)
   end))
   for k, key in ipairs(lkeys) do
-    f(key, t[key],...)
+    f(t[key], key,...)
   end
 end
 
@@ -151,7 +151,7 @@ end
 function _.count(t, value)
   if _.isNil(value) then return _.size(t) end
   local count = 0
-  _.each(t, function(k,v)
+  _.each(t, function(v,k)
     if _.isEqual(v, value) then count = count + 1 end
   end)
   return count
@@ -333,7 +333,7 @@ end
 -- @return an array of values from the passed-in table
 -- @see findWhere
 function _.where(t, props)
-	local r = _.select(t, function(__,v)
+	local r = _.select(t, function(v)
 		for key in pairs(props) do
 			if v[key] ~= props[key] then return false end
 		end
@@ -362,14 +362,14 @@ end
 -- <br/><em>Aliased as `filter`</em>.
 -- @name select
 -- @param t a table
--- @param f an iterator function, prototyped as `f (k, v, ...)`
+-- @param f an iterator function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return the selected values
 -- @see reject
 function _.select(t, f, ...)
   local _t = {}
   for index,value in pairs(t) do
-    if f(index, value,...) then _t[#_t+1] = value end
+    if f(value, index,...) then _t[#_t+1] = value end
   end
   return _t
 end
@@ -474,7 +474,7 @@ end
 function _.shuffle(t, seed)
   if seed then randomseed(seed) end
   local _shuffled = {}
-  _.each(t,function(index,value)
+  _.each(t,function(value,index)
      local randPos = floor(random()*index)+1
     _shuffled[index] = _shuffled[randPos]
     _shuffled[randPos] = value
@@ -520,11 +520,11 @@ function _.sortBy(t, transform, comp)
 	end
 	comp = comp or f_min	
 	local _t = {}
-	_.each(t, function(__,v)
+	_.each(t, function(v)
 		_t[#_t+1] = {value = v, transform = f(v)}
 	end)
 	t_sort(_t, function(a,b) return comp(a.transform, b.transform) end)
-   _.each(t, function(i)
+   _.each(t, function(_,i)
       t[i] = _t[i].value
    end)
    return t
@@ -539,7 +539,7 @@ end
 function _.groupBy(t, iter, ...)
   local vararg = {...}
   local _t = {}
-  _.each(t, function(i,v)
+  _.each(t, function(v,i)
       local _key = iter(i,v, unpack(vararg))
       if _t[_key] then _t[_key][#_t[_key]+1] = v
       else _t[_key] = {v}
@@ -557,7 +557,7 @@ end
 function _.countBy(t, iter, ...)
   local vararg = {...}
   local stats = {}
-  _.each(t,function(i,v)
+  _.each(t,function(v,i)
       local key = iter(i,v,unpack(vararg))
       stats[key] = (stats[key] or 0) +1
     end)
@@ -648,7 +648,7 @@ end
 -- @see sample
 function _.sampleProb(array, prob, seed)
 	if seed then randomseed(seed) end
-	return _.select(array, function(_,v) return random() < prob end)
+	return _.select(array, function(v) return random() < prob end)
 end
 
 --- Converts a list of arguments to an array.
@@ -809,7 +809,7 @@ end
 -- @return the passed-in array with new values added
 -- @see push
 function _.unshift(array, ...)
-  _.each({...},function(i,v) t_insert(array,1,v) end)
+  _.each({...},function(v,i) t_insert(array,1,v) end)
   return array
 end
 
@@ -820,7 +820,7 @@ end
 -- @return the passed-in array with new added values
 -- @see unshift
 function _.push(array, ...)
-  _.each({...}, function(i,v) array[#array+1] = v end)
+  _.each({...}, function(v,i) array[#array+1] = v end)
   return array
 end
 
@@ -914,7 +914,7 @@ function _.chunk(array, f, ...)
   if not _.isArray(array) then return array end
   local ch, ck, prev = {}, 0
   local mask = _.map(array, f,...)
-  _.each(mask, function(k,v)
+  _.each(mask, function(v,k)
     prev = (prev==nil) and v or prev
     ck = ((v~=prev) and (ck+1) or ck)
     if not ch[ck] then
@@ -935,7 +935,7 @@ end
 -- @param[optchain] finish the upper bound index, defaults to the array length.
 -- @return a new array of sliced values
 function _.slice(array, start, finish)
-  return _.select(array, function(index)
+  return _.select(array, function(_,index)
       return (index >= (start or next(array)) and index <= (finish or #array))
     end)
 end
@@ -1025,7 +1025,7 @@ function _.flatten(array, shallow)
   for key,value in pairs(array) do
     if _.isTable(value) then
       new_flattened = shallow and value or _.flatten (value)
-      _.each(new_flattened, function(_,item) _flat[#_flat+1] = item end)
+      _.each(new_flattened, function(item) _flat[#_flat+1] = item end)
     else _flat[#_flat+1] = value
     end
   end
@@ -1043,7 +1043,7 @@ end
 -- @see symmetricDifference
 function _.difference(array, array2)
   if not array2 then return _.clone(array) end
-  return _.select(array,function(i,value)
+  return _.select(array,function(value,i)
       return not _.include(array2,value)
     end)
 end
@@ -1268,7 +1268,7 @@ end
 -- @return a new array
 function _.invert(array)
   local _ret = {}
-  _.each(array,function(i,v) _ret[v] = i end)
+  _.each(array,function(v,i) _ret[v] = i end)
   return _ret
 end
 
@@ -1430,7 +1430,7 @@ end
 -- @return a list of results
 function _.juxtapose(value, ...)
   local res = {}
-  _.each({...}, function(_,f) res[#res+1] = f(value) end)
+  _.each({...}, function(f) res[#res+1] = f(value) end)
   return unpack(res)
 end
 
@@ -1730,7 +1730,7 @@ end
 -- @return an array
 function _.keys(obj)
   local _oKeys = {}
-  _.each(obj,function(key) _oKeys[#_oKeys+1]=key end)
+  _.each(obj,function(_,key) _oKeys[#_oKeys+1]=key end)
   return _oKeys
 end
 
@@ -1740,7 +1740,7 @@ end
 -- @return an array
 function _.values(obj)
   local _oValues = {}
-  _.each(obj,function(_,value) _oValues[#_oValues+1]=value end)
+  _.each(obj,function(value) _oValues[#_oValues+1]=value end)
   return _oValues
 end
 
@@ -1751,7 +1751,7 @@ end
 -- @see toObj
 function _.kvpairs(obj)
 	local t = {}
-	_.each(obj, function(k,v) t[#t+1] = {k,v} end)
+	_.each(obj, function(v,k) t[#t+1] = {k,v} end)
 	return t
 end
 
@@ -1805,9 +1805,9 @@ end
 -- @return the destination object extended
 function _.extend(destObj, ...)
   local sources = {...}
-  _.each(sources,function(__,source)
+  _.each(sources,function(source)
     if _.isTable(source) then
-      _.each(source,function(key,value)
+      _.each(source,function(value,key)
         destObj[key] = value
       end)
     end
@@ -1825,7 +1825,7 @@ end
 function _.functions(obj, recurseMt)
   obj = obj or _
   local _methods = {}
-  _.each(obj,function(key,value)
+  _.each(obj,function(value,key)
     if _.isFunction(value) then
       _methods[#_methods+1]=key
     end
@@ -1836,7 +1836,7 @@ function _.functions(obj, recurseMt)
   local mt = getmetatable(obj)
   if mt and mt.__index then
     local mt_methods = _.functions(mt.__index)
-    _.each(mt_methods, function(k,fn)
+    _.each(mt_methods, function(fn,k)
       _methods[#_methods+1] = fn
     end)
   end
@@ -1851,7 +1851,7 @@ end
 function _.clone(obj, shallow)
   if not _.isTable(obj) then return obj end
   local _obj = {}
-  _.each(obj,function(i,v)
+  _.each(obj,function(v,i)
     if _.isTable(v) then
       if not shallow then
         _obj[i] = _.clone(v,shallow)
@@ -1895,7 +1895,7 @@ end
 function _.pick(obj, ...)
   local whitelist = _.flatten {...}
   local _picked = {}
-  _.each(whitelist,function(key,property)
+  _.each(whitelist,function(property,key)
       if not _.isNil(obj[property]) then
         _picked[property] = obj[property]
       end
@@ -1912,7 +1912,7 @@ end
 function _.omit(obj, ...)
   local blacklist = _.flatten {...}
   local _picked = {}
-  _.each(obj,function(key,value)
+  _.each(obj,function(value,key)
       if not _.include(blacklist,key) then
         _picked[key] = value
       end
@@ -1927,7 +1927,7 @@ end
 -- @param[opt] template a template object. Defaults to an empty table `{}`.
 -- @return the passed-in object filled
 function _.template(obj, template)
-  _.each(template or {},function(i,v)
+  _.each(template or {},function(v,i)
   if not obj[i] then obj[i] = v end
   end)
   return obj
@@ -2241,7 +2241,7 @@ do
   f.import = function(context, noConflict)
     context = context or _ENV or _G
     local funcs = _.functions()
-    _.each(funcs, function(k, fname)  
+    _.each(funcs, function(fname, k)
       if rawget(context, fname) then
         if not noConflict then
           context[fname] = _[fname]        
