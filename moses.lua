@@ -27,7 +27,7 @@ local function f_max(a,b) return a>b end
 local function f_min(a,b) return a<b end
 local function clamp(var,a,b) return (var<a) and a or (var>b and b or var) end
 local function isTrue(_,value) return value and true end
-local function iNot(value) return not value end
+local function iNot(_,value) return not value end
 
 local function count(t)  -- raw count of items in an map-table
   local i = 0
@@ -378,7 +378,7 @@ end
 -- <br/><em>Aliased as `discard`</em>
 -- @name reject
 -- @param t a table
--- @param f an iterator function, prototyped as `f (k, v, ...)`
+-- @param f an iterator function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return the remaining values
 -- @see select
@@ -1008,7 +1008,7 @@ end
 -- @param array an array
 -- @return a new array
 function _.compact(array)
-  return _.reject(array, function (_,value)
+  return _.reject(array, function (value)
     return not value
   end)
 end

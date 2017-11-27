@@ -371,11 +371,11 @@ context('Table functions specs', function()
   context('reject', function()
   
     test('collects all values failing a truth test with an iterator', function()
-      assert_true(_.isEqual(_.reject({1,2,3,4,5,6,7}, function(key,value) 
+      assert_true(_.isEqual(_.reject({1,2,3,4,5,6,7}, function(value,key) 
           return (value%2==0)
         end),{1,3,5,7}))
         
-      assert_true(_.isEqual(_.reject({1,2,3,4,5,6,7}, function(key,value) 
+      assert_true(_.isEqual(_.reject({1,2,3,4,5,6,7}, function(value,key) 
           return (value%2~=0)
         end),{2,4,6}))        
     end)
