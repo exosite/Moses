@@ -158,10 +158,10 @@ function _.count(t, value)
 end
 
 --- Counts occurrences validating a predicate. Same as @{count}, but uses an iterator. 
--- Returns the count for values passing the test `f (k, v, ...)`
+-- Returns the count for values passing the test `f (v, k, ...)`
 -- @name countf
 -- @param t a table
--- @param f an iterator function, prototyped as `f (k, v, ...)`
+-- @param f an iterator function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return the count of values validating the predicate
 -- @see count

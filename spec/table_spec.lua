@@ -105,10 +105,10 @@ context('Table functions specs', function()
   context('countf', function()
     
     test('count the occurences of values passing an iterator test in a list', function()
-      assert_equal(_.countf({1,2,3,4,5,6}, function(i,v)
+      assert_equal(_.countf({1,2,3,4,5,6}, function(v,i)
         return v%2==0
       end),3)
-      assert_equal(_.countf({print, pairs, os, assert, ipairs}, function(i,v)
+      assert_equal(_.countf({print, pairs, os, assert, ipairs}, function(v,i)
         return type(v)=='function'
       end),4)      
     end)
