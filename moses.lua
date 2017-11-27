@@ -393,12 +393,12 @@ end
 
 --- Checks if all values in a table are passing an iterator test.
 -- <br/><em>Aliased as `every`</em>
--- @name all
+-- @name every
 -- @param t a table
 -- @param f an iterator function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return `true` if all values passes the predicate, `false` otherwise
-function _.all(t, f, ...)
+function _.every(t, f, ...)
   return ((#_.filter(_.map(t,f,...), isTrue)) == count(t))
 end
 
@@ -489,8 +489,8 @@ end
 -- @param b another table
 -- @return `true` or `false`
 function _.same(a, b)
-  return _.all(a, function (v,i) return _.include(b,v) end) 
-     and _.all(b, function (v,i) return _.include(a,v) end)
+  return _.every(a, function (v,i) return _.include(b,v) end)
+     and _.every(b, function (v,i) return _.include(a,v) end)
 end
 
 --- Sorts a table, in-place. If a comparison function is given, it will be used to sort values.
@@ -1072,7 +1072,7 @@ function _.intersection(array, ...)
   local arg = {...}
   local _intersect = {}
   for i,value in ipairs(array) do
-    if _.all(arg,function(v,i)
+    if _.every(arg,function(v,i)
           return _.include(v,value)
         end) then
       t_insert(_intersect,value)
@@ -2136,7 +2136,6 @@ do
   _.some        = _.include
   _.contains    = _.include
   _.discard     = _.reject
-  _.every       = _.all
   
   -- Array functions aliases
   _.takeWhile   = _.selectWhile
