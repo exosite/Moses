@@ -197,17 +197,17 @@ function _.cycle(t, n)
   end
 end
 
---- Maps `f (k, v)` on key-value pairs, collects and returns the results.
+--- Maps `f (v, k)` on key-value pairs, collects and returns the results.
 -- <br/><em>Aliased as `collect`</em>.
 -- @name map
 -- @param t a table
--- @param f  an iterator function, prototyped as `f (k, v, ...)`
+-- @param f  an iterator function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return a table of results
 function _.map(t, f, ...)
   local _t = {}
   for index,value in pairs(t) do
-    local k, kv, v = index, f(index,value,...)
+    local k, kv, v = index, f(value,index,...)
     _t[v and kv or k] = v or kv
   end
   return _t
@@ -411,7 +411,7 @@ end
 -- @see pluck
 function _.invoke(t, method, ...)
   local args = {...}
-  return _.map(t, function(__,v)
+  return _.map(t, function(v)
     if _.isTable(v) then
       if _.has(v,method) then
         if _.isCallable(v[method]) then
@@ -436,7 +436,7 @@ end
 -- @param key a key, will be used to index in each value: `value[key]`
 -- @return an array of values having the given key
 function _.pluck(t, key)
-  return _.reject(_.map(t,function(__,value)
+  return _.reject(_.map(t,function(value)
       return value[key]
     end), iNot)
 end
@@ -902,7 +902,7 @@ function _.removeRange(array, start, finish)
 end
 
 --- Chunks together consecutive values. Values are chunked on the basis of the return
--- value of a provided predicate `f (k, v, ...)`. Consecutive elements which return 
+-- value of a provided predicate `f (k, v, ...)`. Consecutive elements which return
 -- the same value are chunked together. Leaves the first argument untouched if it is not an array.
 -- @name chunk
 -- @param array an array
@@ -1134,7 +1134,7 @@ end
 -- @see unzip
 function _.zip(...)
   local arg = {...}
-  local _len = _.max(_.map(arg,function(i,v)
+  local _len = _.max(_.map(arg,function(v,i)
       return #v
     end))
   local _ans = {}
@@ -1283,7 +1283,7 @@ end
 -- @param[optchain] j the final index, defaults to the array length.
 -- @return a string
 function _.join(array, sep, i, j)
-  local _array = _.map(array,function(i,v)
+  local _array = _.map(array,function(v,i)
     return tostring(v)
   end)
   return t_concat(_array,sep,i or 1,j or #array)
