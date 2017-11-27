@@ -239,7 +239,7 @@ end
 -- @param t a table
 -- @param f an iterator function, prototyped as `f (state, value)`
 -- @param state an initial state of reduction.
--- @param pred a predicate function `pred (k, v, ...)` to select values to be considered for reduction
+-- @param pred a predicate function `pred (v, k, ...)` to select values to be considered for reduction
 -- @param[opt] ... optional args to be passed to `pred`
 -- @return the final state of reduction
 -- @see reduce
