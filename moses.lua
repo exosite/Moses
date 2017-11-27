@@ -27,7 +27,7 @@ local function f_max(a,b) return a>b end
 local function f_min(a,b) return a<b end
 local function clamp(var,a,b) return (var<a) and a or (var>b and b or var) end
 local function isTrue(value) return value and true end
-local function iNot(value) return not value end
+local function iNot(_,value) return not value end
 
 local function count(t)  -- raw count of items in an map-table
   local i = 0
@@ -158,10 +158,10 @@ function _.count(t, value)
 end
 
 --- Counts occurrences validating a predicate. Same as @{count}, but uses an iterator. 
--- Returns the count for values passing the test `f (k, v, ...)`
+-- Returns the count for values passing the test `f (v, k, ...)`
 -- @name countf
 -- @param t a table
--- @param f an iterator function, prototyped as `f (k, v, ...)`
+-- @param f an iterator function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return the count of values validating the predicate
 -- @see count
@@ -197,17 +197,17 @@ function _.cycle(t, n)
   end
 end
 
---- Maps `f (k, v)` on key-value pairs, collects and returns the results.
+--- Maps `f (v, k)` on key-value pairs, collects and returns the results.
 -- <br/><em>Aliased as `collect`</em>.
 -- @name map
 -- @param t a table
--- @param f  an iterator function, prototyped as `f (k, v, ...)`
+-- @param f  an iterator function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return a table of results
 function _.map(t, f, ...)
   local _t = {}
   for index,value in pairs(t) do
-    local k, kv, v = index, f(index,value,...)
+    local k, kv, v = index, f(value,index,...)
     _t[v and kv or k] = v or kv
   end
   return _t
@@ -378,7 +378,7 @@ end
 -- <br/><em>Aliased as `discard`</em>
 -- @name reject
 -- @param t a table
--- @param f an iterator function, prototyped as `f (k, v, ...)`
+-- @param f an iterator function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return the remaining values
 -- @see select
@@ -395,7 +395,7 @@ end
 -- <br/><em>Aliased as `every`</em>
 -- @name all
 -- @param t a table
--- @param f an iterator function, prototyped as `f (k, v, ...)`
+-- @param f an iterator function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return `true` if all values passes the predicate, `false` otherwise
 function _.all(t, f, ...)
@@ -411,7 +411,7 @@ end
 -- @see pluck
 function _.invoke(t, method, ...)
   local args = {...}
-  return _.map(t, function(__,v)
+  return _.map(t, function(v)
     if _.isTable(v) then
       if _.has(v,method) then
         if _.isCallable(v[method]) then
@@ -436,7 +436,7 @@ end
 -- @param key a key, will be used to index in each value: `value[key]`
 -- @return an array of values having the given key
 function _.pluck(t, key)
-  return _.reject(_.map(t,function(__,value)
+  return _.reject(_.map(t,function(value)
       return value[key]
     end), iNot)
 end
@@ -489,8 +489,8 @@ end
 -- @param b another table
 -- @return `true` or `false`
 function _.same(a, b)
-  return _.all(a, function (i,v) return _.include(b,v) end) 
-     and _.all(b, function (i,v) return _.include(a,v) end)
+  return _.all(a, function (v,i) return _.include(b,v) end) 
+     and _.all(b, function (v,i) return _.include(a,v) end)
 end
 
 --- Sorts a table, in-place. If a comparison function is given, it will be used to sort values.
@@ -902,11 +902,11 @@ function _.removeRange(array, start, finish)
 end
 
 --- Chunks together consecutive values. Values are chunked on the basis of the return
--- value of a provided predicate `f (k, v, ...)`. Consecutive elements which return 
+-- value of a provided predicate `f (v, k, ...)`. Consecutive elements which return
 -- the same value are chunked together. Leaves the first argument untouched if it is not an array.
 -- @name chunk
 -- @param array an array
--- @param f an iterator function prototyped as `f (k, v, ...)`
+-- @param f an iterator function prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return a table of chunks (arrays)
 -- @see zip
@@ -1008,7 +1008,7 @@ end
 -- @param array an array
 -- @return a new array
 function _.compact(array)
-  return _.reject(array, function (_,value)
+  return _.reject(array, function (value)
     return not value
   end)
 end
@@ -1072,7 +1072,7 @@ function _.intersection(array, ...)
   local arg = {...}
   local _intersect = {}
   for i,value in ipairs(array) do
-    if _.all(arg,function(i,v)
+    if _.all(arg,function(v,i)
           return _.include(v,value)
         end) then
       t_insert(_intersect,value)
@@ -1134,7 +1134,7 @@ end
 -- @see unzip
 function _.zip(...)
   local arg = {...}
-  local _len = _.max(_.map(arg,function(i,v)
+  local _len = _.max(_.map(arg,function(v,i)
       return #v
     end))
   local _ans = {}
@@ -1283,7 +1283,7 @@ end
 -- @param[optchain] j the final index, defaults to the array length.
 -- @return a string
 function _.join(array, sep, i, j)
-  local _array = _.map(array,function(i,v)
+  local _array = _.map(array,function(v,i)
     return tostring(v)
   end)
   return t_concat(_array,sep,i or 1,j or #array)

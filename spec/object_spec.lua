@@ -189,9 +189,9 @@ context('Object functions specs', function()
       local catchMin = function(k) t[#t+1] = _.min(k) end
       
       _.chain({1,2,3})
-        :map(function(i,j) return j*2 end)
+        :map(function(j,i) return j*2 end)
         :tap(catchMax)
-        :map(function(i,k) return k^2 end)
+        :map(function(k,i) return k^2 end)
         :tap(catchMin)
         :value()
         

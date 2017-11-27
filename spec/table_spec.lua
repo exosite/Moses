@@ -105,10 +105,10 @@ context('Table functions specs', function()
   context('countf', function()
     
     test('count the occurences of values passing an iterator test in a list', function()
-      assert_equal(_.countf({1,2,3,4,5,6}, function(i,v)
+      assert_equal(_.countf({1,2,3,4,5,6}, function(v,i)
         return v%2==0
       end),3)
-      assert_equal(_.countf({print, pairs, os, assert, ipairs}, function(i,v)
+      assert_equal(_.countf({print, pairs, os, assert, ipairs}, function(v,i)
         return type(v)=='function'
       end),4)      
     end)
@@ -174,19 +174,19 @@ context('Table functions specs', function()
   context('map', function()
   
     test('applies an iterator function over each key-value pair ', function()
-      assert_true(_.isEqual(_.map({1,2,3},function(i,v) 
+      assert_true(_.isEqual(_.map({1,2,3},function(v,i)
           return v+10 
         end),{11,12,13}))
     end)
 
     test('iterates over non-numeric keys and objects', function()
-      assert_true(_.isEqual(_.map({a = 1, b = 2},function(k,v) 
+      assert_true(_.isEqual(_.map({a = 1, b = 2},function(v,k)
           return k..v 
         end),{a = 'a1',b = 'b2'}))
     end)
 
     test('maps key-value pairs to key-value pairs', function()
-      assert_true(_.isEqual(_.map({a = 1, b = 2}, function(k, v)
+      assert_true(_.isEqual(_.map({a = 1, b = 2}, function(v, k)
           return k .. k, v + 10
         end), {aa = 11, bb = 12}))
     end)
@@ -371,11 +371,11 @@ context('Table functions specs', function()
   context('reject', function()
   
     test('collects all values failing a truth test with an iterator', function()
-      assert_true(_.isEqual(_.reject({1,2,3,4,5,6,7}, function(key,value) 
+      assert_true(_.isEqual(_.reject({1,2,3,4,5,6,7}, function(value,key) 
           return (value%2==0)
         end),{1,3,5,7}))
         
-      assert_true(_.isEqual(_.reject({1,2,3,4,5,6,7}, function(key,value) 
+      assert_true(_.isEqual(_.reject({1,2,3,4,5,6,7}, function(value,key) 
           return (value%2~=0)
         end),{2,4,6}))        
     end)
@@ -385,11 +385,11 @@ context('Table functions specs', function()
   context('all', function()
   
     test('returns whether all elements matches a truth test', function()
-      assert_true(_.all({2,4,6}, function(key,value) 
+      assert_true(_.all({2,4,6}, function(value,key) 
           return (value%2==0)
         end))
         
-      assert_false(_.all({false,true,false}, function(key,value) 
+      assert_false(_.all({false,true,false}, function(value,key) 
           return value == false
         end))        
     end) 
