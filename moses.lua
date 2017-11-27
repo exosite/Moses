@@ -702,14 +702,14 @@ end
 -- <br/><em>Aliased as `takeWhile`</em>
 -- @name selectWhile
 -- @param array an array
--- @param f an iterator function prototyped as `f (k, v, ...)`
+-- @param f an iterator function prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return a new table containing all values collected
 -- @see dropWhile
 function _.selectWhile(array, f, ...)
   local t = {}
   for i,v in ipairs(array) do
-    if f(i,v,...) then t[i] = v else break end
+    if f(v,i,...) then t[i] = v else break end
   end
   return t
 end
