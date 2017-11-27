@@ -208,11 +208,11 @@ context('Array functions specs', function()
   context('findIndex', function()
   
     test('returns the first index at which a predicate passes a truth test', function()
-      assert_equal(_.findIndex({1,2,3,4,5},function(__,v) return v%2==0 end),2)
+      assert_equal(_.findIndex({1,2,3,4,5},function(v) return v%2==0 end),2)
     end)
     
     test('returns nil when nothing was found', function()
-      assert_nil(_.findIndex({1,2,3,4,5},function(_,v) return v>5 end))
+      assert_nil(_.findIndex({1,2,3,4,5},function(v) return v>5 end))
     end)  
     
   end)	

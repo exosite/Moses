@@ -779,13 +779,13 @@ end
 --- Returns the first index at which a predicate returns true.
 -- @name findIndex
 -- @param array an array
--- @param predicate a predicate function prototyped as `predicate (k, v, ...)`
+-- @param predicate a predicate function prototyped as `predicate (v, k, ...)`
 -- @param[opt] ... optional arguments to `pred`
 -- @return the index found or __nil__
 -- @see findLastIndex
 function _.findIndex(array, predicate, ...)
 	for k = 1, #array do
-		if predicate(k,array[k],...) then return k end
+		if predicate(array[k],k,...) then return k end
 	end
 end
 
