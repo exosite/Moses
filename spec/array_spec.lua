@@ -220,11 +220,11 @@ context('Array functions specs', function()
   context('findLastIndex', function()
   
     test('returns the last index at which a predicate passes a truth test', function()
-      assert_equal(_.findLastIndex({1,2,3,4,5},function(_,v) return v%2==0 end),4)
+      assert_equal(_.findLastIndex({1,2,3,4,5},function(v) return v%2==0 end),4)
     end)
     
     test('returns nil when nothing was found', function()
-      assert_nil(_.findLastIndex({1,2,3,4,5},function(_,v) return v>5 end))
+      assert_nil(_.findLastIndex({1,2,3,4,5},function(v) return v>5 end))
     end)  
     
   end)
