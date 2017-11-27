@@ -297,13 +297,12 @@ end
 --- Performs a linear search for a value in a table. It does not work for nested tables.
 -- The given value can be a function prototyped as `f (v, value)` which should return true when
 -- any v in the table equals the value being searched. 
--- <br/><em>Aliased as `any`, `some`, `contains`</em>
--- @name include
+-- @name some
 -- @param t a table
 -- @param value a value to search for
 -- @return a boolean : `true` when found, `false` otherwise
 -- @see detect
-function _.include(t, value)
+function _.some(t, value)
   local _iter = _.isFunction(value) and value or _.isEqual
   for __,v in pairs(t) do
     if _iter(v,value) then return true end
@@ -318,7 +317,7 @@ end
 -- @param t a table
 -- @param value a value to search for
 -- @return the key of the value when found or __nil__
--- @see include
+-- @see some
 function _.detect(t, value)
   local _iter = _.isFunction(value) and value or _.isEqual
   for key,arg in pairs(t) do
@@ -489,8 +488,8 @@ end
 -- @param b another table
 -- @return `true` or `false`
 function _.same(a, b)
-  return _.every(a, function (v,i) return _.include(b,v) end)
-     and _.every(b, function (v,i) return _.include(a,v) end)
+  return _.every(a, function (v,i) return _.some(b,v) end)
+     and _.every(b, function (v,i) return _.some(a,v) end)
 end
 
 --- Sorts a table, in-place. If a comparison function is given, it will be used to sort values.
@@ -1044,7 +1043,7 @@ end
 function _.difference(array, array2)
   if not array2 then return _.clone(array) end
   return _.filter(array,function(value,i)
-      return not _.include(array2,value)
+      return not _.some(array2,value)
     end)
 end
 
@@ -1073,7 +1072,7 @@ function _.intersection(array, ...)
   local _intersect = {}
   for i,value in ipairs(array) do
     if _.every(arg,function(v,i)
-          return _.include(v,value)
+          return _.some(v,value)
         end) then
       t_insert(_intersect,value)
     end
@@ -1913,7 +1912,7 @@ function _.omit(obj, ...)
   local blacklist = _.flatten {...}
   local _picked = {}
   _.each(obj,function(value,key)
-      if not _.include(blacklist,key) then
+      if not _.some(blacklist,key) then
         _picked[key] = value
       end
     end)
@@ -2132,9 +2131,6 @@ do
   _.foldr       = _.reduceRight
   _.mapr        = _.mapReduce
   _.maprr       = _.mapReduceRight
-  _.any         = _.include
-  _.some        = _.include
-  _.contains    = _.include
   _.discard     = _.reject
   
   -- Array functions aliases

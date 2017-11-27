@@ -292,7 +292,7 @@ context('Utility functions specs', function()
       local ids = {}
       for i = 1,100 do
         local newId = _.uniqueId()
-        assert_false(_.include(ids,newId))
+        assert_false(_.some(ids,newId))
         _.push(ids,newId)
       end     
     end)
@@ -302,7 +302,7 @@ context('Utility functions specs', function()
       for i = 1,100 do
         local newId = _.uniqueId('ID:%s')
         assert_equal(newId,'ID:'..newId:sub(4))
-        assert_false(_.include(ids,newId))
+        assert_false(_.some(ids,newId))
         _.push(ids,newId)
       end        
     end)
@@ -313,7 +313,7 @@ context('Utility functions specs', function()
       for i = 1,100 do
         local newId = _.uniqueId(formatter)
         assert_not_nil(newId:match('^%$%d+%$$'))
-        assert_false(_.include(ids,newId))
+        assert_false(_.some(ids,newId))
         _.push(ids,newId)
       end        
     end)

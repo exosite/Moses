@@ -267,22 +267,22 @@ context('Table functions specs', function()
     
   end)  
 
-  context('include', function()
+  context('some', function()
   
     test('looks for a value in a collection, returns true when found', function()
-      assert_true(_.include({6,8,10,16,29},16))
+      assert_true(_.some({6,8,10,16,29},16))
     end)
     
     test('returns false when value was not found', function()
-      assert_false(_.include({6,8,10,16,29},1))
+      assert_false(_.some({6,8,10,16,29},1))
     end)
     
     test('can lookup for a object', function()
-      assert_true(_.include({6,{18,{2,6}},10,{18,{2,{3}}},29},{18,{2,{3}}}))
+      assert_true(_.some({6,{18,{2,6}},10,{18,{2,{3}}},29},{18,{2,{3}}}))
     end)    
     
     test('given an iterator, return the first value passing a truth test', function()
-      assert_true(_.include({'a','B','c'}, function(array_value)
+      assert_true(_.some({'a','B','c'}, function(array_value)
         return (array_value:upper() == array_value)
       end))
     end) 
