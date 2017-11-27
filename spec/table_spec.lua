@@ -47,7 +47,7 @@ context('Table functions specs', function()
     test('provides values and iteration count for integer keys only, in a sorted way', function()
       local t = {1,2,3}
       local inc = 0
-      _.eachi(t,function(i,v)
+      _.eachi(t,function(v,i)
         inc = inc+1
         assert_equal(i,inc)
         assert_equal(t[i],v)
@@ -59,7 +59,7 @@ context('Table functions specs', function()
       local rk = {-1, 0, 1, 2}
       local rv = {6, 1, 3, 5}
       local inc = 0
-      _.eachi(t,function(i,v)
+      _.eachi(t,function(v,i)
         inc = inc+1
         assert_equal(i,rk[inc])
         assert_equal(v,rv[inc])

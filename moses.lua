@@ -110,13 +110,13 @@ function _.each(t, f, ...)
   end
 end
 
---- Iterates on integer key-value pairs, calling `f(k, v)` every step. 
+--- Iterates on integer key-value pairs, calling `f(v, k)` every step.
 -- Only applies to values located at integer keys. The table can be a sparse array. 
 -- Iteration will start from the lowest integer key found to the highest one.
 -- <br/><em>Aliased as `forEachi`</em>.
 -- @name eachi
 -- @param t a table
--- @param f a function, prototyped as `f (k, v, ...)`
+-- @param f a function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @see each
 function _.eachi(t, f, ...)
@@ -124,7 +124,7 @@ function _.eachi(t, f, ...)
     return _.isInteger(v)
   end))
   for k, key in ipairs(lkeys) do
-    f(key, t[key],...)
+    f(t[key], key,...)
   end
 end
 
