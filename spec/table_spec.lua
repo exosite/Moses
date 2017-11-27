@@ -543,15 +543,15 @@ context('Table functions specs', function()
   
     test('splits a collection into subsets of items behaving the same', function()
 
-      assert_true(_.isEqual(_.groupBy({0,1,2,3,4,5,6},function(i,value) 
+      assert_true(_.isEqual(_.groupBy({0,1,2,3,4,5,6},function(value,i)
           return value%2==0 and 'even' or 'odd'
         end),{even = {0,2,4,6},odd = {1,3,5}}))
         
-      assert_true(_.isEqual(_.groupBy({0,'a',true, false,nil,b,0.5},function(i,value) 
+      assert_true(_.isEqual(_.groupBy({0,'a',true, false,nil,b,0.5},function(value,i)
           return type(value) 
         end),{number = {0,0.5},string = {'a'},boolean = {true,false}}))
         
-      assert_true(_.isEqual(_.groupBy({'one','two','three','four','five'},function(i,value) 
+      assert_true(_.isEqual(_.groupBy({'one','two','three','four','five'},function(value,i)
           return value:len()
         end),{[3] = {'one','two'},[4] = {'four','five'},[5] = {'three'}}))
         
@@ -559,8 +559,8 @@ context('Table functions specs', function()
     
     test('can takes extra-args', function()
     
-      assert_true(_.isEqual(_.groupBy({3,9,10,12,15}, function(k,v,x) return v%x == 0 end,2), {[false] = {3,9,15}, [true] = {10,12}}))
-      assert_true(_.isEqual(_.groupBy({3,9,10,12,15}, function(k,v,x) return v%x == 0 end,3), {[false] = {10}, [true] = {3,9,12,15}}))
+      assert_true(_.isEqual(_.groupBy({3,9,10,12,15}, function(v,k,x) return v%x == 0 end,2), {[false] = {3,9,15}, [true] = {10,12}}))
+      assert_true(_.isEqual(_.groupBy({3,9,10,12,15}, function(v,k,x) return v%x == 0 end,3), {[false] = {10}, [true] = {3,9,12,15}}))
       
     end)
   

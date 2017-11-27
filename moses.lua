@@ -533,14 +533,14 @@ end
 --- Splits a table into subsets groups.
 -- @name groupBy
 -- @param t a table
--- @param iter an iterator function, prototyped as `iter (k, v, ...)`
+-- @param iter an iterator function, prototyped as `iter (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `iter`
 -- @return a table of subsets groups
 function _.groupBy(t, iter, ...)
   local vararg = {...}
   local _t = {}
   _.each(t, function(v,i)
-      local _key = iter(i,v, unpack(vararg))
+      local _key = iter(v,i, unpack(vararg))
       if _t[_key] then _t[_key][#_t[_key]+1] = v
       else _t[_key] = {v}
       end
