@@ -129,13 +129,13 @@ context('Array functions specs', function()
   context('selectWhile', function()
   
     test('collect values from an array while they pass a thruth test', function()
-      assert_true(_.isEqual(_.selectWhile({2,4,6,8}, function(i,v)
+      assert_true(_.isEqual(_.selectWhile({2,4,6,8}, function(v,i)
           return v%2==0
         end),{2,4,6,8}))
     end)
     
     test('breaks as soon as one value do not pass the test', function()
-      assert_true(_.isEqual(_.selectWhile({2,4,6,8,9,10,12}, function(i,v)
+      assert_true(_.isEqual(_.selectWhile({2,4,6,8,9,10,12}, function(v,i)
           return v%2==0
         end),{2,4,6,8}))
     end)
