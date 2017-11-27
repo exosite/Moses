@@ -140,7 +140,7 @@ context('Object functions specs', function()
 
     test('when given no obj as argument, returns all library functions',function()
       local functions = _.functions()
-      _.each(functions, function(k,v)
+      _.each(functions, function(v,k)
         assert_true(_.isFunction(_[v]))
       end)
     end)
