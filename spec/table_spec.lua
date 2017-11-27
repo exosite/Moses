@@ -570,15 +570,15 @@ context('Table functions specs', function()
   
     test('splits a collection in subsets and counts items inside', function()
 
-      assert_true(_.isEqual(_.countBy({0,1,2,3,4,5,6},function(i,value)
+      assert_true(_.isEqual(_.countBy({0,1,2,3,4,5,6},function(value,i)
           return value%2==0 and 'even' or 'odd'
         end),{even = 4,odd = 3}))
         
-      assert_true(_.isEqual(_.countBy({0,'a',true, false,nil,b,0.5},function(i,value)
+      assert_true(_.isEqual(_.countBy({0,'a',true, false,nil,b,0.5},function(value,i)
           return type(value) 
         end),{number = 2,string = 1,boolean = 2}))
         
-      assert_true(_.isEqual(_.countBy({'one','two','three','four','five'},function(i,value)
+      assert_true(_.isEqual(_.countBy({'one','two','three','four','five'},function(value,i)
           return value:len()
         end),{[3] = 2,[4] = 2,[5] = 1}))
         

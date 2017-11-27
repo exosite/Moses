@@ -551,14 +551,14 @@ end
 --- Groups values in a collection and counts them.
 -- @name countBy
 -- @param t a table
--- @param iter an iterator function, prototyped as `iter (k, v, ...)`
+-- @param iter an iterator function, prototyped as `iter (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `iter`
 -- @return a table of subsets groups names paired with their count
 function _.countBy(t, iter, ...)
   local vararg = {...}
   local stats = {}
   _.each(t,function(v,i)
-      local key = iter(i,v,unpack(vararg))
+      local key = iter(v,i,unpack(vararg))
       stats[key] = (stats[key] or 0) +1
     end)
   return stats
