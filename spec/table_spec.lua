@@ -385,11 +385,11 @@ context('Table functions specs', function()
   context('all', function()
   
     test('returns whether all elements matches a truth test', function()
-      assert_true(_.all({2,4,6}, function(key,value) 
+      assert_true(_.all({2,4,6}, function(value,key) 
           return (value%2==0)
         end))
         
-      assert_false(_.all({false,true,false}, function(key,value) 
+      assert_false(_.all({false,true,false}, function(value,key) 
           return value == false
         end))        
     end) 
