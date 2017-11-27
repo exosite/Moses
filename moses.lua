@@ -26,7 +26,7 @@ local _                          = {}
 local function f_max(a,b) return a>b end
 local function f_min(a,b) return a<b end
 local function clamp(var,a,b) return (var<a) and a or (var>b and b or var) end
-local function isTrue(_,value) return value and true end
+local function isTrue(value) return value and true end
 local function iNot(value) return not value end
 
 local function count(t)  -- raw count of items in an map-table
@@ -120,7 +120,7 @@ end
 -- @param[opt] ... Optional args to be passed to `f`
 -- @see each
 function _.eachi(t, f, ...)
-  local lkeys = _.sort(_.select(_.keys(t), function(k,v)
+  local lkeys = _.sort(_.select(_.keys(t), function(v,k)
     return _.isInteger(v)
   end))
   for k, key in ipairs(lkeys) do
@@ -333,7 +333,7 @@ end
 -- @return an array of values from the passed-in table
 -- @see findWhere
 function _.where(t, props)
-	local r = _.select(t, function(__,v)
+	local r = _.select(t, function(v)
 		for key in pairs(props) do
 			if v[key] ~= props[key] then return false end
 		end
@@ -362,14 +362,14 @@ end
 -- <br/><em>Aliased as `filter`</em>.
 -- @name select
 -- @param t a table
--- @param f an iterator function, prototyped as `f (k, v, ...)`
+-- @param f an iterator function, prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return the selected values
 -- @see reject
 function _.select(t, f, ...)
   local _t = {}
   for index,value in pairs(t) do
-    if f(index, value,...) then _t[#_t+1] = value end
+    if f(value, index,...) then _t[#_t+1] = value end
   end
   return _t
 end
@@ -648,7 +648,7 @@ end
 -- @see sample
 function _.sampleProb(array, prob, seed)
 	if seed then randomseed(seed) end
-	return _.select(array, function(_,v) return random() < prob end)
+	return _.select(array, function(v) return random() < prob end)
 end
 
 --- Converts a list of arguments to an array.
@@ -935,7 +935,7 @@ end
 -- @param[optchain] finish the upper bound index, defaults to the array length.
 -- @return a new array of sliced values
 function _.slice(array, start, finish)
-  return _.select(array, function(index)
+  return _.select(array, function(_,index)
       return (index >= (start or next(array)) and index <= (finish or #array))
     end)
 end
@@ -1043,7 +1043,7 @@ end
 -- @see symmetricDifference
 function _.difference(array, array2)
   if not array2 then return _.clone(array) end
-  return _.select(array,function(i,value)
+  return _.select(array,function(value,i)
       return not _.include(array2,value)
     end)
 end
