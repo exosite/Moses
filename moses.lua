@@ -902,11 +902,11 @@ function _.removeRange(array, start, finish)
 end
 
 --- Chunks together consecutive values. Values are chunked on the basis of the return
--- value of a provided predicate `f (k, v, ...)`. Consecutive elements which return
+-- value of a provided predicate `f (v, k, ...)`. Consecutive elements which return
 -- the same value are chunked together. Leaves the first argument untouched if it is not an array.
 -- @name chunk
 -- @param array an array
--- @param f an iterator function prototyped as `f (k, v, ...)`
+-- @param f an iterator function prototyped as `f (v, k, ...)`
 -- @param[opt] ... Optional args to be passed to `f`
 -- @return a table of chunks (arrays)
 -- @see zip
